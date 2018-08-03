@@ -6,9 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-/**
- * Created by Rustem.Saidaliyev on 01.02.2018.
- */
+
 @ControllerAdvice
 public class ExceptionHandlingController {
 

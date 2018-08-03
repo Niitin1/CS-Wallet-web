@@ -36,7 +36,6 @@ public class SmartContractTransformer {
                 sourceCode,
                 smartContractData.getHashState(),
                 smartContractData.getMethod(),
-                //smartContractData.getParams() TODO
                 null
         );
     };

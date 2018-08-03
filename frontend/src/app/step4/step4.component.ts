@@ -104,7 +104,6 @@ export class Step4Component implements OnInit {
     this.download();
 
 
-  //   this.dataService.systemTransaction(this.adressKey) //убираем системную  транзакцию
 
   }
 

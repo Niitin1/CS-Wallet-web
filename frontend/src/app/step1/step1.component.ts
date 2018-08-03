@@ -66,12 +66,6 @@ The message string collected from the parameters to generate the transaction
 
        let signPair = nacl.sign.keyPair();
 
-       /* FEATURE/IMPROVEMENT
-
-       The transition from base64 to base 58
-       */
-
-
        let  Base58 = require('base-58');
 
        this.addressKey = Base58.encode(signPair.publicKey);
@@ -98,12 +92,8 @@ The message string collected from the parameters to generate the transaction
     this.changeStepEvent.emit(this.dataService.prevStep);
   }
 
-  /*CS 122
-
-     the method is created for the specified task
-
-   */
-
+  
+   //The method is created for the specified task
   uint8arrayToStringMethod(myUint8Arr) {
 
     return String.fromCharCode.apply(null, myUint8Arr);

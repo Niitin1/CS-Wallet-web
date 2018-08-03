@@ -118,7 +118,6 @@ export class DataService {
 
     this.privateKeyAr.next(privateKeyAr);
 
-    //  this.toAdress = addressKey;
 
   }
 

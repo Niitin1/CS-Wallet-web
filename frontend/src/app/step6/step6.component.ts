@@ -28,9 +28,9 @@ export class Step6Component implements OnInit {
 
   feeValueIsValid : boolean = true;
 
-  addressKey : string; // кошелек
+  addressKey : string; // wallet address
 
-  toAddress : string; // куда шлем
+  toAddress : string; 
 
   step : number = 6;
 
@@ -38,7 +38,7 @@ export class Step6Component implements OnInit {
 
   ngOnInit() {
 
-    this.dataService.addressKeyObservable.subscribe( // получили кошелек откуда  будем  слать
+    this.dataService.addressKeyObservable.subscribe(
       addressKey => {
         this.addressKey = addressKey
       }
@@ -56,14 +56,13 @@ export class Step6Component implements OnInit {
     });
 
     this.csKontrol.valueChanges.subscribe(value => {
-      // TODO Refactor code after previous developer working
 
       if(value == null) {
         this.coinsControl = true;
         this.createPaymentIsHidden = false;
       }
 
-      if (value != null) { // проверим на валидность  по балансу
+      if (value != null) { // check for validity by balance
 
         this.value = (value + "").toString();
 
@@ -87,7 +86,7 @@ export class Step6Component implements OnInit {
           this.coinsControl = false;
         }
       }
-      if (value != null && this.toAddress != null) { // проверим на валидность  по балансу и по  заполненности адреса
+      if (value != null && this.toAddress != null) { // check for validity by balance and by addres
 
         if (this.dataService.amountInCs != 0 && this.dataService.accountData.balance != 0 && this.addressKey != this.toAddress && this.numSym < 16 ) {
           this.createPaymentIsHidden = true
@@ -103,13 +102,12 @@ export class Step6Component implements OnInit {
 
 
     this.feeControl.valueChanges.subscribe(value => {
-      // TODO Refactor code after previous developer working
       if(value == null) {
         this.feeValueIsValid = true;
         this.createPaymentIsHidden = false;
       }
 
-      if (value != null) { // проверим на валидность  по балансу
+      if (value != null) {
 
         this.value = (value + "").toString();
 
@@ -132,7 +130,7 @@ export class Step6Component implements OnInit {
           this.feeValueIsValid = false;
         }
       }
-      if (value != null && this.toAddress != null) { // проверим на валидность  по балансу и по  заполненности адреса
+      if (value != null && this.toAddress != null) {
 
         if (this.dataService.offeredMaxFee != 0 && this.dataService.accountData.balance != 0 && this.addressKey != this.toAddress && this.feeDigitCount < 16 ) {
           this.createPaymentIsHidden = true

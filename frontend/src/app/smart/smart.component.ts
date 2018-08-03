@@ -97,11 +97,8 @@ export class SmartComponent implements OnInit {
     );
 
     this.privateKey = "3rUevsW5xfob6qDxWMDFwwTQCq39SYhzstuyfUGSDvF2QHBRyPD8fSk49wFXaPk3GztfxtuU85QHfMV3ozfqa7rN";
-    // console.log(this.base58.decode(this.privateKey));
     let signedMessage = this.tweetnacl.sign.detached(thisComponent.bufferToUint8array(buffer), thisComponent.base58.decode(thisComponent.privateKey));
-    // console.log("signedMessage = " + signedMessage);
     thisComponent.signatureBase58 = thisComponent.base58.encode(signedMessage);
-    // console.log("thisComponent.signatureBase58 = " + thisComponent.signatureBase58);
     thisComponent.smartContractExecution = new SmartContractExecutionData();
     thisComponent.smartContractExecution.smartContractAddress = thisComponent.currentSmartContract.address;
     thisComponent.smartContractExecution.smartContractHashState = thisComponent.currentSmartContract.hashState;

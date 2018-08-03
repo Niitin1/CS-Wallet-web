@@ -62,11 +62,6 @@ export class Step5Component implements OnInit {
 
     let nacl = require('tweetnacl');
 
-    /* FEATURE/IMPROVEMENT
-
-     The transition from base64 to base 58
-
-   */
 
     let  Base58 = require('base-58');
 
@@ -76,7 +71,6 @@ export class Step5Component implements OnInit {
 
         let pKatob;
 
-        //let ar = [];
 
         let pubKatob = 'pubKatob';
 
@@ -101,21 +95,11 @@ export class Step5Component implements OnInit {
 
           this.hidden = true;
 
-
-          //    document.getElementById("password1").setAttribute('readonly',"readonly");
-
-          //    document.getElementById("password2").setAttribute('readonly',"readonly");
-
         }
 
         if (pubKatob != pubKnacl) {
 
           this.hidden = false;
-
-
-          //    document.getElementById("password1").setAttribute('readonly',"readonly");
-
-          //    document.getElementById("password2").setAttribute('readonly',"readonly");
 
         }
       }
@@ -133,16 +117,12 @@ export class Step5Component implements OnInit {
 
         let pKatob;
 
-        // let ar = [];
-
         let pubKatob = 'pubKatob';
 
         let pubKnacl = 'pubKnacl';
 
         if (this.addressKey.length > 0 && this.privateKey.length > 0) {
 
-
-          //ar = atob(this.privateKey).split(',');
 
           pKatob = Base58.decode(this.privateKey);
 

@@ -1,8 +1,6 @@
 package com.credits.wallet.exception;
 
-/**
- * Created by Rustem.Saidaliyev on 01.02.2018.
- */
+
 public class ExceptionResponse {
     private String errorCode;
     private String errorMessage;

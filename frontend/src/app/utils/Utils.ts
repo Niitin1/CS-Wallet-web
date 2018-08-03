@@ -3,12 +3,10 @@ export class Utils {
   base58 = require('base-58');
 
   public parseInt(value: number): number{
-    // TODO Refactor previous developer source code
     return Number(value.toFixed(15).substring(0, value.toFixed(15).indexOf('.')));
   }
 
   public parseFraction(value: number): number {
-    // TODO Refactor previous developer source code
     let fraction = '';
     if(value.toString().indexOf('.') > 0) {
       let decimals = value - Math.floor(value);

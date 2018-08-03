@@ -70,7 +70,6 @@ public class SmartContractController extends AbstractController {
         }
 
         smartContractData.setMethod(smartContractExecution.getExecutionMethod());
-        //smartContractExecution.getExecutionMethodParamsVals()
         smartContractData.setParams(null);
 
         ApiResponseData apiResponseData;

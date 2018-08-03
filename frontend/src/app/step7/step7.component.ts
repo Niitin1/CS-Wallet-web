@@ -69,21 +69,14 @@ The message string collected from the parameters to generate the transaction
       }
     );
 
-    //Необходимо  сразу  отобразить  сигнатуру,  поэтому  начитываем при инциализации компонента
-    this.dataService.refreshBalance(this.dataService.currencyCode); //обновим баланс
+    this.dataService.refreshBalance(this.dataService.currencyCode); //update the balance
 
     this.innerId = Number(Date.now());
-    // this.innerId = 1532529576028;
-    // this.addressKey = "5B3YXqDTcWQFGAqEJQJP3Bg1ZK8FFtHtgCiFLT5VAxpe";
-    // this.toAddress = "B3EBaHgRU7sd353axMRrZfoL9aL2XjA3oXejDdPrMnHR";
+
     var tranAmountInt = this.utils.parseInt(this.dataService.amountInCs);
-    // var tranAmountInt = 10;
     var tranAmountFrac = this.utils.parseFraction(this.dataService.amountInCs);
-    // var tranAmountFrac = 0;
     var tranOfferedMaxFeeInt = this.utils.parseInt(this.dataService.offeredMaxFee);
-    // var tranOfferedMaxFeeInt = 0;
     var tranOfferedMaxFeeFraction = this.utils.parseFraction(this.dataService.offeredMaxFee);
-    // var tranOfferedMaxFeeFraction = 100000000000000006;
     var currencyCode = 1;
     var userFieldCount = 0;
 
@@ -100,12 +93,11 @@ The message string collected from the parameters to generate the transaction
       null
     );
 
-    // this.privateKey = "3rUevsW5xfob6qDxWMDFwwTQCq39SYhzstuyfUGSDvF2QHBRyPD8fSk49wFXaPk3GztfxtuU85QHfMV3ozfqa7rN";
-    // console.log("this.base58.encode(buffer) = " + this.base58.encode(buffer));
+
     let signedMessage = this.tweetnacl.sign.detached(this.bufferToUint8array(buffer), this.base58.decode(this.privateKey));
-    // console.log("signedMessage = " + signedMessage);
+
     this.signature = this.base58.encode(signedMessage);
-     // console.log(this.signature);
+
     this.balance = this.dataService.accountData.balance;
   }
 
@@ -126,13 +118,11 @@ The message string collected from the parameters to generate the transaction
       ).subscribe(
         data =>  {
           this.dataService.openDialogInfo("Transaction created successfully");
-          // console.log(data);
           this.dataService.prevStep = 6;
           this.changeStepEvent.emit(step);
         },
         err => {
           this.dataService.openDialogInfo(err.error.message);
-          // console.log(err);
         }
       );
     } else {

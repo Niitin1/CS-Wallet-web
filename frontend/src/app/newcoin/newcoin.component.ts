@@ -48,13 +48,6 @@ export class NewcoinComponent implements OnInit {
         this.hidden = true
         break
       }
-/*
-      else {
-        this.hidden = false
-      }
-      */
-
-
     }
 
 

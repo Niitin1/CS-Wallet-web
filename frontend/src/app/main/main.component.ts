@@ -16,12 +16,6 @@ export class MainComponent implements OnInit {
   @Output() changeStepEvent = new EventEmitter<number>();
 
   ngOnInit() {
-/*
-    this.dataService.isWalletOpened = true; // TODO delete
-    this.dataService.accountData = new AccountData();
-    this.dataService.accountData.wallet = "8J7oZawJadpRFoMpQb42ffV3HN5zxtLjUJfNN8jpxUgp";
-    // this.dataService.refreshSmartContractList(this.dataService.accountData.wallet);
-*/
   }
 
   receiveStep($event) {

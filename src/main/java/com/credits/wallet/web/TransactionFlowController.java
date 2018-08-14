@@ -1,11 +1,13 @@
 package com.credits.wallet.web;
 
 import com.credits.common.exception.CreditsException;
+import com.credits.common.utils.Converter;
 import com.credits.leveldb.client.data.TransactionFlowData;
 import com.credits.wallet.domain.Transaction;
 import com.credits.wallet.domain.transformer.TransactionTransformer;
 import com.credits.wallet.domain.transformer.Transformer;
 import com.credits.wallet.exception.WalletWebException;
+import com.credits.wallet.utils.WalletWebConverter;
 import com.credits.wallet.utils.WalletWebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,14 +29,15 @@ public class TransactionFlowController extends AbstractController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/transactionFlow", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void newTransaction(@RequestBody Transaction transaction) {
-        LOGGER.info("innerId = {}; source = {}; target = {}; amount = {}; balance = {};currency = {}",
-            transaction.getInnerId(), transaction.getSource(), transaction.getTarget(),
-            transaction.getAmount(), transaction.getBalance(), transaction.getCurrency(), transaction.getSignature());
-
-        Transformer<Transaction, TransactionFlowData> transformer = new Transformer<>(TransactionTransformer.TO_CORE);
-        List<TransactionFlowData> transactionFlowDataList = transformer.batchTransform(Arrays.asList(transaction));
         try {
-            apiClient.transactionFlow(transactionFlowDataList.get(0),true);
+
+            byte[] transactionFieldsBytes = Converter.decodeFromBASE58(transaction.getTranFieldsBytesBase58());
+            LOGGER.info("Transaction fields bytes: {}", Converter.byteArrayToString(transactionFieldsBytes, " "));
+            byte[] transactionSignatureBytes = Converter.decodeFromBASE58(transaction.getSignatureBase58());
+            LOGGER.info("Transaction signature bytes: {}", Converter.byteArrayToString(transactionSignatureBytes, " "));
+
+            TransactionFlowData transactionFlowData = WalletWebConverter.transactionToTransactionFlowData(transaction);
+            apiClient.transactionFlow(transactionFlowData,true);
             LOGGER.info("Transaction has been sent");
         } catch (CreditsException e) {
             LOGGER.error(e.getMessage(), e);

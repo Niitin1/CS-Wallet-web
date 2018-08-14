@@ -13,13 +13,13 @@ export class Step8Component implements OnInit {
 
   constructor(public dataService: DataService,public platformLocation: PlatformLocation) { }
 
-  toAddress : string; 
-  addressKey : string;
+  toAddress : string; // Wallet address to receive
+
+  addressKey : string; // Wallet address to send
 
   transactionFeePer : number  = 0;
 
   step : number = 8;
-
 
   ngOnInit() {
 

@@ -80,10 +80,10 @@ export class SmartComponent implements OnInit {
     var tranAmountFrac = 0;
     var tranOfferedMaxFeeInt = 0;
     var tranOfferedMaxFeeFraction = 0;
-    var currencyCode = 0;
+    var currencyCode = 1;
     var userFieldCount = 1;
 
-    var buffer = this.utils.createTransactionBuffer(
+    var buffer = thisComponent.utils.createTransactionBuffer(
       innerId,
       tranSource,
       tranTarget,
@@ -96,8 +96,7 @@ export class SmartComponent implements OnInit {
       thisComponent.currentSmartContractBytesBase58
     );
 
-    this.privateKey = "3rUevsW5xfob6qDxWMDFwwTQCq39SYhzstuyfUGSDvF2QHBRyPD8fSk49wFXaPk3GztfxtuU85QHfMV3ozfqa7rN";
-    let signedMessage = this.tweetnacl.sign.detached(thisComponent.bufferToUint8array(buffer), thisComponent.base58.decode(thisComponent.privateKey));
+    let signedMessage = thisComponent.tweetnacl.sign.detached(thisComponent.bufferToUint8array(buffer), thisComponent.base58.decode(thisComponent.privateKey));
     thisComponent.signatureBase58 = thisComponent.base58.encode(signedMessage);
     thisComponent.smartContractExecution = new SmartContractExecutionData();
     thisComponent.smartContractExecution.smartContractAddress = thisComponent.currentSmartContract.address;
@@ -110,6 +109,7 @@ export class SmartComponent implements OnInit {
     thisComponent.smartContractExecution.transactionInnerId = innerId;
     thisComponent.smartContractExecution.transactionSource = tranSource;
     thisComponent.smartContractExecution.signatureBase58 = thisComponent.signatureBase58;
+    thisComponent.smartContractExecution.tranFieldsBytesBase58 = thisComponent.base58.encode(buffer);
 
     thisComponent.executeSmartContract(thisComponent.smartContractExecution).subscribe(
       data =>  {

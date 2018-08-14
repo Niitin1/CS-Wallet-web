@@ -57,12 +57,12 @@ export class Step5Component implements OnInit {
     Validation of public and private key
     The keys are compared using the nacl method.sign.keyPair.fromSecretKey
 
-
      */
 
     let nacl = require('tweetnacl');
 
 
+     //The transition from base64 to base 58
     let  Base58 = require('base-58');
 
     this.keyControl.valueChanges.subscribe(value =>
@@ -70,7 +70,6 @@ export class Step5Component implements OnInit {
       try {
 
         let pKatob;
-
 
         let pubKatob = 'pubKatob';
 
@@ -95,11 +94,13 @@ export class Step5Component implements OnInit {
 
           this.hidden = true;
 
+
         }
 
         if (pubKatob != pubKnacl) {
 
           this.hidden = false;
+
 
         }
       }

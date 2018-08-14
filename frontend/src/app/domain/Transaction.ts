@@ -5,6 +5,7 @@ export class Transaction {
   amount: number;
   balance :  number;
   currency: number;
-  signature: string;
+  signatureBase58: string;
   offeredMaxFee: number;
+  tranFieldsBytesBase58: string;
 }

@@ -6,4 +6,5 @@ export class SmartContractExecutionData {
   transactionInnerId: number;
   transactionSource: string;
   signatureBase58: string;
+  tranFieldsBytesBase58: string;
 }

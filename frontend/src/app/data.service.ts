@@ -59,6 +59,7 @@ export class DataService {
   ) {
 
     this.networkList = environment.networks;
+	
   }
 
   private privateKeySource = new BehaviorSubject<string>('');
@@ -118,7 +119,6 @@ export class DataService {
 
     this.privateKeyAr.next(privateKeyAr);
 
-
   }
 
   changedPublicKeyAr(publicKey: number[]) {
@@ -130,7 +130,6 @@ export class DataService {
   changeToAddress(Address: string) {
 
     this.toAddressSourse.next(Address);
-
 
   }
 
@@ -180,8 +179,9 @@ export class DataService {
     amount: number,
     balance: number,
     currencyCode: number,
-    signature: string,
-    offeredMaxFee: number
+    signatureBase58: string,
+    offeredMaxFee: number,
+    tranFieldsBytesBase58
   ) {
 
     this.transaction.innerId = innerId;
@@ -190,8 +190,9 @@ export class DataService {
     this.transaction.amount  = amount;
     this.transaction.balance = balance;
     this.transaction.currency = currencyCode;
-    this.transaction.signature = signature;
+    this.transaction.signatureBase58 = signatureBase58;
     this.transaction.offeredMaxFee = offeredMaxFee;
+    this.transaction.tranFieldsBytesBase58 = tranFieldsBytesBase58;
 
     return this.http.post(this.baseUrl + 'transactionFlow', this.transaction)
                .map(response => {
@@ -214,7 +215,6 @@ export class DataService {
 
   refreshBaseUrl(net) {
     this.baseUrl = net.serviceAddress + '/' +  environment.javaServiceEndpoint;
-    console.log("this.baseUrl = " + this.baseUrl);
     this.monitorAddress = net.monitorAddress + '/' +  environment.monitorUrlPart;
   }
 

@@ -28,9 +28,9 @@ export class Step6Component implements OnInit {
 
   feeValueIsValid : boolean = true;
 
-  addressKey : string; // wallet address
+  addressKey : string; // Wallet address to send
 
-  toAddress : string; 
+  toAddress : string; // Wallet adress to receive
 
   step : number = 6;
 
@@ -38,7 +38,7 @@ export class Step6Component implements OnInit {
 
   ngOnInit() {
 
-    this.dataService.addressKeyObservable.subscribe(
+    this.dataService.addressKeyObservable.subscribe( // received a wallet from where we send
       addressKey => {
         this.addressKey = addressKey
       }
@@ -62,7 +62,7 @@ export class Step6Component implements OnInit {
         this.createPaymentIsHidden = false;
       }
 
-      if (value != null) { // check for validity by balance
+      if (value != null) { // balance validity check
 
         this.value = (value + "").toString();
 
@@ -86,7 +86,7 @@ export class Step6Component implements OnInit {
           this.coinsControl = false;
         }
       }
-      if (value != null && this.toAddress != null) { // check for validity by balance and by addres
+      if (value != null && this.toAddress != null) { // check for validity by balance and by address
 
         if (this.dataService.amountInCs != 0 && this.dataService.accountData.balance != 0 && this.addressKey != this.toAddress && this.numSym < 16 ) {
           this.createPaymentIsHidden = true
@@ -107,7 +107,7 @@ export class Step6Component implements OnInit {
         this.createPaymentIsHidden = false;
       }
 
-      if (value != null) {
+      if (value != null) { // balance validity check
 
         this.value = (value + "").toString();
 
@@ -130,7 +130,7 @@ export class Step6Component implements OnInit {
           this.feeValueIsValid = false;
         }
       }
-      if (value != null && this.toAddress != null) {
+      if (value != null && this.toAddress != null) { // Validation for validity by balance and by address
 
         if (this.dataService.offeredMaxFee != 0 && this.dataService.accountData.balance != 0 && this.addressKey != this.toAddress && this.feeDigitCount < 16 ) {
           this.createPaymentIsHidden = true

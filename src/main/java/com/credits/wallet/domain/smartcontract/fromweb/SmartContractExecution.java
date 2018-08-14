@@ -11,6 +11,7 @@ public class SmartContractExecution {
     private long transactionInnerId;
     private String transactionSource;
     private String signatureBase58;
+    private String tranFieldsBytesBase58;
 
     public String getSmartContractHashState() {
         return smartContractHashState;
@@ -66,5 +67,17 @@ public class SmartContractExecution {
 
     public void setSignature(String signatureBase58) {
         this.signatureBase58 = signatureBase58;
+    }
+
+    public void setSignatureBase58(String signatureBase58) {
+        this.signatureBase58 = signatureBase58;
+    }
+
+    public String getTranFieldsBytesBase58() {
+        return tranFieldsBytesBase58;
+    }
+
+    public void setTranFieldsBytesBase58(String tranFieldsBytesBase58) {
+        this.tranFieldsBytesBase58 = tranFieldsBytesBase58;
     }
 }

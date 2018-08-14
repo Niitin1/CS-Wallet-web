@@ -12,8 +12,9 @@ public class Transaction implements Serializable {
     private BigDecimal amount;
     private BigDecimal balance;
     private byte currency;
-    private ByteBuffer signature;
+    private String signatureBase58;
     private BigDecimal offeredMaxFee;
+    private String tranFieldsBytesBase58;
 
     public long getInnerId() {
         return innerId;
@@ -71,11 +72,19 @@ public class Transaction implements Serializable {
         this.offeredMaxFee = offeredMaxFee;
     }
 
-    public ByteBuffer getSignature() {
-        return signature;
+    public String getSignatureBase58() {
+        return signatureBase58;
     }
 
-    public void setSignature(ByteBuffer signature) {
-        this.signature = signature;
+    public void setSignatureBase58(String signatureBase58) {
+        this.signatureBase58 = signatureBase58;
+    }
+
+    public String getTranFieldsBytesBase58() {
+        return tranFieldsBytesBase58;
+    }
+
+    public void setTranFieldsBytesBase58(String tranFieldsBytesBase58) {
+        this.tranFieldsBytesBase58 = tranFieldsBytesBase58;
     }
 }

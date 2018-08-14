@@ -60,6 +60,11 @@ public class SmartContractController extends AbstractController {
 
         SmartContractData smartContractData;
         try {
+            byte[] transactionFieldsBytes = Converter.decodeFromBASE58(smartContractExecution.getTranFieldsBytesBase58());
+            LOGGER.info("Transaction fields bytes: {}", Converter.byteArrayToString(transactionFieldsBytes, " "));
+            byte[] transactionSignatureBytes = Converter.decodeFromBASE58(smartContractExecution.getSignatureBase58());
+            LOGGER.info("Transaction signature bytes: {}", Converter.byteArrayToString(transactionSignatureBytes, " "));
+
             smartContractData = apiClient.getSmartContract(smartContractExecution.getSmartContractAddress());
         } catch (CreditsException e) {
             throw new WalletWebException(ERROR_CODE, WalletWebUtils.createWalletWebExceptionMessage(e));
@@ -70,7 +75,7 @@ public class SmartContractController extends AbstractController {
         }
 
         smartContractData.setMethod(smartContractExecution.getExecutionMethod());
-        smartContractData.setParams(null);
+        smartContractData.setParams(smartContractExecution.getExecutionMethodParamsVals());
 
         ApiResponseData apiResponseData;
         try {

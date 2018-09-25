@@ -1,6 +1,7 @@
 package com.credits.wallet.web;
 
 import com.credits.common.exception.CreditsException;
+import com.credits.common.utils.Converter;
 import com.credits.leveldb.client.data.SmartContractData;
 import com.credits.wallet.domain.smartcontract.toweb.SmartContract;
 import com.credits.wallet.domain.transformer.SmartContractTransformer;
@@ -29,7 +30,7 @@ public class SmartContractsController extends AbstractController {
         Transformer<SmartContractData, SmartContract> transformer =
             new Transformer<>(SmartContractTransformer.TO_WALLET);
         try {
-            List<SmartContractData> smartContractDatas = apiClient.getSmartContracts(address);
+            List<SmartContractData> smartContractDatas = apiClient.getSmartContracts(Converter.decodeFromBASE58(address));
             return new ResponseEntity<List<SmartContract>>(transformer.batchTransform(smartContractDatas), HttpStatus.OK);
         } catch (CreditsException e) {
             throw new WalletWebException(ERROR_CODE, WalletWebUtils.createWalletWebExceptionMessage(e));
@@ -42,7 +43,7 @@ public class SmartContractsController extends AbstractController {
         Transformer<SmartContractData, SmartContract> transformer =
             new Transformer<>(SmartContractTransformer.TO_WALLET);
         try {
-            List<SmartContractData> smartContracts = apiClient.getSmartContracts(address);
+            List<SmartContractData> smartContracts = apiClient.getSmartContracts(Converter.decodeFromBASE58(address));
             return transformer.batchTransform(smartContracts);
         } catch (CreditsException e) {
             throw new WalletWebException(ERROR_CODE, WalletWebUtils.createWalletWebExceptionMessage(e));

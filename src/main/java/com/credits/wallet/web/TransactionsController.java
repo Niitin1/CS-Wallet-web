@@ -1,6 +1,7 @@
 package com.credits.wallet.web;
 
 import com.credits.common.exception.CreditsException;
+import com.credits.common.utils.Converter;
 import com.credits.leveldb.client.data.TransactionData;
 import com.credits.wallet.domain.Transaction;
 import com.credits.wallet.domain.transformer.TransactionTransformer;
@@ -22,7 +23,7 @@ import java.util.List;
 @CrossOrigin
 public class TransactionsController extends AbstractController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionsController.class);
 
     @RequestMapping(method = RequestMethod.GET, value = "/transactions")
     public List<Transaction> getTransactions(@RequestParam String address, @RequestParam Long offset,
@@ -30,7 +31,7 @@ public class TransactionsController extends AbstractController {
 
         LOGGER.info("Getting a list of transaction from [{}] to [{}] for address [{}]", offset, limit, address);
         try {
-            List<TransactionData> transactionDataList = apiClient.getTransactions(address, offset, limit);
+            List<TransactionData> transactionDataList = apiClient.getTransactions(Converter.decodeFromBASE58(address), offset, limit);
 
             Transformer<TransactionData, Transaction> transformer = new Transformer<>(TransactionTransformer.TO_WALLET);
 

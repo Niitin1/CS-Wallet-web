@@ -1,12 +1,13 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {DataService} from "../data.service";
 import {HttpClient} from "@angular/common/http";
-import {SmartContractExecutionData} from "../domain/smartcontract/fromweb/SmartContractExecutionData";
+import {SmartContractExecuteRequest} from "../domain/smartcontract/fromweb/SmartContractExecuteRequest";
 import {GuidGenerator} from "../utils/GuidGenerator";
-import {HttpResponseData} from "../domain/http-response";
+import {HttpResponseData} from "../domain/HttpResponse";
 import {SmartContractData} from "../domain/smartcontract/toweb/SmartContractData";
 import {MethodData} from "../domain/smartcontract/toweb/MethodData";
 import {Utils} from "../utils/Utils";
+import {GenerateSmartContractBytesRequest} from "../domain/GenerateSmartContractBytesRequest";
 
 @Component({
   selector: 'app-smart',
@@ -17,19 +18,23 @@ export class SmartComponent implements OnInit {
 
   step : number = 65;
 
-  smartContractExecution: SmartContractExecutionData;
+  smartContractExecuteRequest: SmartContractExecuteRequest;
+
+  generateSmartContractBytesRequest: GenerateSmartContractBytesRequest;
 
   currentSmartContract : SmartContractData;
 
   currentMethod: MethodData;
 
-  currentSmartContractBytesBase58: string;
+  smartContractInvocationBytesBase58: string;
 
   signatureBase58: string;
 
   smartContractAddress: string;
 
   privateKey:  string = "";
+
+  forgetNewState: boolean = false;
 
   tweetnacl = require('tweetnacl');
 
@@ -71,11 +76,11 @@ export class SmartComponent implements OnInit {
     this.currentMethod = methodValue;
   }
 
-  createSignature(thisComponent: SmartComponent) {
+  signAndExecuteSmartContract() {
 
     var innerId = Number(Date.now());
-    var tranSource = thisComponent.dataService.accountData.wallet;
-    var tranTarget = thisComponent.currentSmartContract.address;
+    var tranSource = this.dataService.accountData.wallet;
+    var tranTarget = this.currentSmartContract.address;
     var tranAmountInt = 0;
     var tranAmountFrac = 0;
     var tranOfferedMaxFeeInt = 0;
@@ -83,7 +88,7 @@ export class SmartComponent implements OnInit {
     var currencyCode = 1;
     var userFieldCount = 1;
 
-    var buffer = thisComponent.utils.createTransactionBuffer(
+    var buffer = this.utils.createTransactionBuffer(
       innerId,
       tranSource,
       tranTarget,
@@ -93,36 +98,47 @@ export class SmartComponent implements OnInit {
       tranOfferedMaxFeeFraction,
       currencyCode,
       userFieldCount,
-      thisComponent.currentSmartContractBytesBase58
+      this.smartContractInvocationBytesBase58
     );
 
-    let signedMessage = thisComponent.tweetnacl.sign.detached(thisComponent.bufferToUint8array(buffer), thisComponent.base58.decode(thisComponent.privateKey));
-    thisComponent.signatureBase58 = thisComponent.base58.encode(signedMessage);
-    thisComponent.smartContractExecution = new SmartContractExecutionData();
-    thisComponent.smartContractExecution.smartContractAddress = thisComponent.currentSmartContract.address;
-    thisComponent.smartContractExecution.smartContractHashState = thisComponent.currentSmartContract.hashState;
-    thisComponent.smartContractExecution.executionMethod = thisComponent.currentMethod.name;
-    thisComponent.smartContractExecution.executionMethodParamsVals = [];
-    for(let param of thisComponent.currentMethod.params) {
-      thisComponent.smartContractExecution.executionMethodParamsVals.push(param.value);
+    let signedMessage = this.tweetnacl.sign.detached(this.bufferToUint8array(buffer), this.base58.decode(this.privateKey));
+    this.signatureBase58 = this.base58.encode(signedMessage);
+    this.smartContractExecuteRequest = new SmartContractExecuteRequest();
+    this.smartContractExecuteRequest.smartContractAddress = this.currentSmartContract.address;
+    this.smartContractExecuteRequest.smartContractHashState = this.currentSmartContract.hashState;
+    this.smartContractExecuteRequest.executionMethod = this.currentMethod.name;
+    this.smartContractExecuteRequest.executionMethodParamsVals = [];
+    for(let param of this.currentMethod.params) {
+      this.smartContractExecuteRequest.executionMethodParamsVals.push(param.value);
     }
-    thisComponent.smartContractExecution.transactionInnerId = innerId;
-    thisComponent.smartContractExecution.transactionSource = tranSource;
-    thisComponent.smartContractExecution.signatureBase58 = thisComponent.signatureBase58;
-    thisComponent.smartContractExecution.tranFieldsBytesBase58 = thisComponent.base58.encode(buffer);
+    this.smartContractExecuteRequest.transactionInnerId = innerId;
+    this.smartContractExecuteRequest.transactionSource = tranSource;
+    this.smartContractExecuteRequest.signatureBase58 = this.signatureBase58;
+    this.smartContractExecuteRequest.tranFieldsBytesBase58 = this.base58.encode(buffer);
+    this.smartContractExecuteRequest.forgetNewState = this.forgetNewState;
 
-    thisComponent.executeSmartContract(thisComponent.smartContractExecution).subscribe(
+    this.executeSmartContract().subscribe(
       data =>  {
-        thisComponent.dataService.openDialogInfo((data as HttpResponseData).value);
+        this.dataService.openDialogInfo((data as HttpResponseData).value);
       },
       err => {
-        thisComponent.dataService.openDialogInfo(err.message);
+        this.dataService.openDialogInfo(err.message);
       }
     );
   }
 
   onExecute() {
-    this.getSmartContractBytesBase58(this.currentSmartContract.address, this.createSignature);
+
+    this.generateSmartContractBytesRequest = new GenerateSmartContractBytesRequest();
+    this.generateSmartContractBytesRequest.addressBase58 = this.currentSmartContract.address;
+    this.generateSmartContractBytesRequest.methodName = this.currentMethod.name;
+    this.generateSmartContractBytesRequest.paramsVals = [];
+    for(let param of this.currentMethod.params) {
+      this.generateSmartContractBytesRequest.paramsVals.push(param.value);
+    }
+    this.generateSmartContractBytesRequest.forgetNewState = this.forgetNewState;
+
+    this.generateSmartContractBytes();
   }
 
   refreshSmartContract(address : string) {
@@ -139,14 +155,11 @@ export class SmartComponent implements OnInit {
     );
   }
 
-  getSmartContractBytesBase58(
-    address: string,
-    callback: (component: SmartComponent) => any
-  ): void {
-    this.http.get<HttpResponseData>(this.dataService.baseUrl + 'smartcontract/bytes/' + address).subscribe(
+  generateSmartContractBytes() {
+    this.http.post<HttpResponseData>(this.dataService.baseUrl + 'smartcontract/generateBytes', this.generateSmartContractBytesRequest).subscribe(
       res => {
-        this.currentSmartContractBytesBase58 = res.value;
-        callback(this);
+        this.smartContractInvocationBytesBase58 = res.value;
+        this.signAndExecuteSmartContract();
       },
       err => {
         this.dataService.openDialogInfo(err.message);
@@ -154,10 +167,8 @@ export class SmartComponent implements OnInit {
     );
   }
 
-  executeSmartContract(
-    smartContractExecutionData: SmartContractExecutionData
-  ) {
-    return this.http.post(this.dataService.baseUrl + 'smartcontract/execute', smartContractExecutionData)
+  executeSmartContract() {
+    return this.http.post(this.dataService.baseUrl + 'smartcontract/execute', this.smartContractExecuteRequest)
       .map(response => response)
   }
 }

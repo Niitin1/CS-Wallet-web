@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable, BehaviorSubject} from "rxjs/Rx";
-import {AccountData} from "./domain/accountdata";
-import {StringResponse} from "./domain/stringresponse";
+import {AccountData} from "./domain/AccountData";
+import {StringResponse} from "./domain/StringResponse";
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import {CustomEncoder} from "./utils/CustomEncoder";
@@ -59,7 +59,6 @@ export class DataService {
   ) {
 
     this.networkList = environment.networks;
-	
   }
 
   private privateKeySource = new BehaviorSubject<string>('');
@@ -113,6 +112,7 @@ export class DataService {
   changedIsFile(isFile: number) {
 
     this.isFileSource.next(isFile);
+	
   }
 
   changedPrivateKeyAr(privateKeyAr: number[]) {

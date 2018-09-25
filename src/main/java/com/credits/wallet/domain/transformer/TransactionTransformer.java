@@ -13,9 +13,9 @@ public class TransactionTransformer {
 
     public static Function<TransactionData, Transaction> TO_WALLET = transactionData -> {
         Transaction transaction = new Transaction();
-        transaction.setInnerId(transactionData.getInnerId());
-        transaction.setSource(transactionData.getSource());
-        transaction.setTarget(transactionData.getTarget());
+        transaction.setId(transactionData.getId());
+        transaction.setSource(Converter.encodeToBASE58(transactionData.getSource()));
+        transaction.setTarget(Converter.encodeToBASE58(transactionData.getTarget()));
         transaction.setAmount(transactionData.getAmount());
         transaction.setCurrency(transactionData.getCurrency());
         return transaction;

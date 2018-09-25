@@ -1,5 +1,6 @@
 package com.credits.wallet.domain.transformer;
 
+import com.credits.common.utils.Converter;
 import com.credits.common.utils.sourcecode.SourceCodeUtils;
 import com.credits.leveldb.client.data.SmartContractData;
 import com.credits.wallet.domain.smartcontract.toweb.Method;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.function.Function;
 
 public class SmartContractTransformer {
+
     public static Function<SmartContractData, SmartContract> TO_WALLET = smartContractData -> {
         String sourceCodeBody = smartContractData.getSourceCode();
         List<MethodDeclaration> methodDeclarations = SourceCodeUtils.parseMethods(sourceCodeBody);
@@ -32,11 +34,10 @@ public class SmartContractTransformer {
         String sourceCodeFormatted = SourceCodeUtils.formatSourceCode(sourceCodeBody);
         SourceCode sourceCode = new SourceCode(sourceCodeFormatted, methods);
         return new SmartContract(
-                smartContractData.getAddress(),
+                Converter.encodeToBASE58(smartContractData.getAddress()),
+                Converter.encodeToBASE58(smartContractData.getDeployer()),
                 sourceCode,
-                smartContractData.getHashState(),
-                smartContractData.getMethod(),
-                null
+                smartContractData.getHashState()
         );
     };
 }

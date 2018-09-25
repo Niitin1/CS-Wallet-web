@@ -37,6 +37,7 @@
             <input class="main-input" data-val="true" type="text" [(ngModel)]="currentMethod.params[i].value" [ngModelOptions]="{standalone: true}"/>
           </div>
         </div>
+        <input type="checkbox" [checked]="forgetNewState" (change)="forgetNewState = !forgetNewState" />
         <p class="fontBold text-center" style="padding-top: 20px;"><a class="bold-link bttn" (click)="onExecute()">Execute</a></p>
       </div>
     </div>

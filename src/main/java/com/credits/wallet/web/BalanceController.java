@@ -1,6 +1,7 @@
 package com.credits.wallet.web;
 
 import com.credits.common.exception.CreditsException;
+import com.credits.common.utils.Converter;
 import com.credits.leveldb.client.exception.CreditsNodeException;
 import com.credits.leveldb.client.exception.LevelDbClientException;
 import com.credits.wallet.exception.WalletWebException;
@@ -22,7 +23,7 @@ public class BalanceController extends AbstractController {
     public BigDecimal getBalance(@RequestParam String address, @RequestParam byte currency) {
         LOGGER.info("Getting balance for [{}], currency [{}]", address, currency);
         try {
-            BigDecimal balance = apiClient.getBalance(address, currency);
+            BigDecimal balance = apiClient.getBalance(Converter.decodeFromBASE58(address), currency);
             LOGGER.info("Received [{}]", balance);
             return balance;
         } catch (CreditsException e) {

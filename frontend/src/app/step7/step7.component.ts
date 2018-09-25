@@ -5,7 +5,7 @@ import {sprintf} from "sprintf-js";
 import {GuidGenerator} from "../utils/GuidGenerator";
 import {environment} from "../../environments/environment";
 import {Utils} from "../utils/Utils";
-import {HttpResponseData} from "../domain/http-response";
+import {HttpResponseData} from "../domain/HttpResponse";
 
 
 @Component({

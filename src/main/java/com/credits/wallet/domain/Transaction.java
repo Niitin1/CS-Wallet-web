@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 
 public class Transaction implements Serializable {
 
-    private long innerId;
+    private long id;
     private String source;
     private String target;
     private BigDecimal amount;
@@ -16,12 +16,12 @@ public class Transaction implements Serializable {
     private BigDecimal offeredMaxFee;
     private String tranFieldsBytesBase58;
 
-    public long getInnerId() {
-        return innerId;
+    public long getId() {
+        return id;
     }
 
-    public void setInnerId(long innerId) {
-        this.innerId = innerId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getSource() {
